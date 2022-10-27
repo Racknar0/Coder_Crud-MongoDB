@@ -1,0 +1,69 @@
+//! usar db ecommerce
+use ecommerce
+
+//! crear colección
+db.createCollection('mensajes')
+db.createCollection('productos')
+
+//! insertar productos
+db.productos.insertMany([
+    {title: "regla", price: 100, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "tijera", price: 200, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "martillo", price: 400, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "destornillador", price: 1000, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "cinta", price: 2000, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "clavo", price: 3000, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "serrucho", price: 4000, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "cuchillo", price: 5000, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "alicate", price: 4400, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+    {title: "pala", price: 3300, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"},
+])
+
+//! insertar un producto
+db.productos.insertOne({title: "cartucho", price: 500, thumbnail: "https://cdn1.iconfinder.com/data/icons/construction-136/300/ruller-work-site-fabric-build-98-512.png"})
+
+//! insertar un mensaje
+db.mensajes.insertOne({
+    email: "correo2@gmail.com",
+    msj: "hola",
+    hora: Date(Date.now())
+})
+
+//! listart todos los productos
+db.productos.find()
+
+//! listar todos los mensajes
+db.mensajes.find()
+
+//! listar un producto por id
+db.productos.find({_id: ObjectId("60f1b5b0b0b5b8b2c8b0b2d4")})
+
+//! contar productos
+db.mensajes.countDocuments()
+
+//! contar mensajes
+db.productos.countDocuments()
+
+//! buscar productos mayores a 1000
+db.productos.find({ price: { $gt: 1000 } })
+
+//! buscar productos menores a 3000 y mayores a 1000
+db.productos.find({ $and: [{ price: { $gte: 1000 } }, { price: { $lte: 3000 } }] })
+
+//! buscar productos mayores a 3000
+db.productos.find({ price: { $gt: 3000 } })
+
+//! actualizar todos los productos con stock 100
+db.productos.updateMany({},{ $set: { stock: 100 } })
+
+//cambiar stock a cero mayores de 4000
+db.productos.updateMany({ price: { $gt: 4000 } }, { $set: { stock: 0 } })
+
+//! borrar todos los productos menores a 1000
+db.productos.deleteMany({ price: { $lt: 1000 } })
+
+//! crear usuario 'pepe' con contraseña 'asd456' que solo pueda leer la base de datos 'ecommerce'
+db.createUser({user: "pepe", pwd: "asd456", roles: [ {role: "read", db: "ecommerce"} ]})
+
+//! Saber mi usuario actual
+db.runCommand({connectionStatus: 1})
